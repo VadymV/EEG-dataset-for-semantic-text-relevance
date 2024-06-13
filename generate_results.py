@@ -12,7 +12,7 @@ from src.misc.utils import set_logging, set_seed, create_args
 
 
 def run(file_pattern: str):
-    parser = create_args()
+    parser = create_args(seeds_args=False, benchmark_args=False)
     args = parser.parse_args()
 
     set_logging(args.project_path, file_name="logs_results")
@@ -22,6 +22,9 @@ def run(file_pattern: str):
     # Read predictions:
     filepaths = glob.glob(
         os.path.join(args.project_path, file_pattern))
+    if not filepaths:
+        logging.warning("No files found. Quitting...")
+        return
     results = []
     for fp in filepaths:
         with open(fp, 'r') as f:

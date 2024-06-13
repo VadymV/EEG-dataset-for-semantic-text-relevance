@@ -12,7 +12,7 @@ from src.misc.utils import set_logging, set_seed, create_args
 
 def run():
     plot = False  # Should the figures be produced?
-    parser = create_args()
+    parser = create_args(seeds_args=False, benchmark_args=False)
     args = parser.parse_args()
 
     set_logging(args.project_path, file_name="logs_prepare")

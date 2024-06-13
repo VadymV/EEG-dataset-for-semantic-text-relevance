@@ -49,7 +49,7 @@ def set_seed(seed):
     cudnn.deterministic = True
 
 
-def create_args() -> argparse.ArgumentParser:
+def create_args(seeds_args: bool = True, benchmark_args: bool = True) -> argparse.ArgumentParser:
     """
     Creates the argument parser.
 
@@ -61,14 +61,16 @@ def create_args() -> argparse.ArgumentParser:
                         type=str,
                         help='A path to the folder containing the EEG data '
                              'called "raw"')
-    parser.add_argument('--seeds',
-                        type=int,
-                        help='Number of seeds to use.',
-                        default=10)
-    parser.add_argument('--benchmark',
-                        type=str,
-                        default='w',
-                        help='"w" or "s"')
+    if seeds_args:
+        parser.add_argument('--seeds',
+                            type=int,
+                            help='Number of seeds to use.',
+                            default=10)
+    if benchmark_args:
+        parser.add_argument('--benchmark',
+                            type=str,
+                            default='w',
+                            help='"w" or "s"')
 
     return parser
 

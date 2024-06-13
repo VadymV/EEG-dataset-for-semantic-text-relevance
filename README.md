@@ -25,24 +25,25 @@ The ``project_path`` should point to the folder that contains the downloaded dat
 ```py
     poetry run python prepare.py --project_path=path
 ```
-- (2) Download the ``data_prepared_for_benchmark`` data that are already contains data prepared to be used in 
+- (2) Download the ``data_prepared_for_benchmark`` data that already contains data prepared to be used in 
 benchmark experiments. This approach is beneficial to enable faster reproduction of benchmark results.
 
 
 ## Run word relevance classification task
 
-The ``project_path`` should point to the folder that contains the data need to reproduce the benchmark results.
+The ``project_path`` should point to the folder that contains the data needed to reproduce the benchmark results.
 ```py
 poetry run python benchmark.py --project_path=path --benchmark=w
 ```
 
 ## Run sentence relevance classification task
 
+The ``project_path`` should point to the folder that contains the data needed to reproduce the benchmark results.
 ```py
 poetry run python benchmark.py --project_path=path --benchmark=s
 ```
 
-## Generate the predition scores
+## Print prediction scores
 
 ```py
 poetry run python generate_results.py --project_path=path
