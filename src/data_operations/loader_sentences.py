@@ -12,7 +12,7 @@ import pandas as pd
 import torch
 from torch.utils.data import Dataset
 
-from neurips.data_operations.misc import load_data
+from src.data_operations.misc import load_data
 
 MAX_SENTENCE_LENGTH = 39  # max([d.shape[0] for d in self.data['text']])
 
@@ -141,7 +141,7 @@ class DatasetSentences(Dataset):
         if len(d['topic'].unique()) != 16 and len(d['user'].unique()) != 1:
             raise ValueError('16 documents should be present per participant.')
 
-        blocks = d[['topic', 'semantic_relevance', 'document_relevance', 'event']].groupby(by=['event']).min().drop_duplicates().sort_index()
+        blocks = d[['topic', 'selected_topic', 'document_relevance', 'event']].groupby(by=['event']).min().drop_duplicates().sort_index()
         blocks['Block'] = np.repeat([*range(1, 9)], 2).tolist()
         blocks = blocks[['topic', 'Block']].drop_duplicates()
 

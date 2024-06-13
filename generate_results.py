@@ -8,7 +8,7 @@ from torch import tensor
 from torchmetrics.classification import BinaryCohenKappa, BinaryPrecision, \
     BinaryRecall, BinaryMatthewsCorrCoef, BinaryAUROC
 
-from neurips.misc.utils import set_logging, set_seed, create_args
+from src.misc.utils import set_logging, set_seed, create_args
 
 
 def run(file_pattern: str):

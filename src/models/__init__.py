@@ -1,14 +1,14 @@
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.linear_model import LogisticRegression
 
-from neurips.data_operations.loader_sentences import MAX_SENTENCE_LENGTH, \
+from src.data_operations.loader_sentences import MAX_SENTENCE_LENGTH, \
     CollatorLSTMSentence, CollatorEEGNetSentence, CollatorTransformerSentence, \
     CollatorSentence
-from neurips.data_operations.loader_words import CollatorLSTMWord, \
+from src.data_operations.loader_words import CollatorLSTMWord, \
     CollatorEEGNetWord, CollatorTransformerWord, CollatorWords
-from neurips.models.eegnet import EEGNet
-from neurips.models.lstm import LSTM
-from neurips.models.uercm import UERCM
+from src.models.eegnet import EEGNet
+from src.models.lstm import LSTM
+from src.models.uercm import UERCM
 
 
 class Models:

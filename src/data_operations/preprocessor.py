@@ -15,8 +15,8 @@ from matplotlib import pyplot as plt
 from mne.epochs import EpochsFIF
 from nltk.stem.snowball import PorterStemmer
 
-from neurips.data_operations.preparator import CHANNELS
-from neurips.misc import utils
+from src.data_operations.preparator import CHANNELS
+from src.misc import utils
 
 
 def get_protocol_data(data_dir: str) -> dict:

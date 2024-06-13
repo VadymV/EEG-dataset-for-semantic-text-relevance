@@ -12,7 +12,7 @@ import pandas as pd
 import torch
 from torch.utils.data import Dataset
 
-from neurips.data_operations.misc import load_data
+from src.data_operations.misc import load_data
 
 
 class DatasetWords(Dataset):

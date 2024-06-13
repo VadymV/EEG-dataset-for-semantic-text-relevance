@@ -9,11 +9,11 @@ from pytorch_lightning.callbacks import EarlyStopping
 from torch.utils.data import DataLoader, Subset
 from torchmetrics import MetricCollection
 
-from neurips.data_operations.loader_sentences import \
+from src.data_operations.loader_sentences import \
     DatasetSentences
-from neurips.data_operations.loader_words import \
+from src.data_operations.loader_words import \
     DatasetWords
-from neurips.data_operations.misc import get_data
+from src.data_operations.misc import get_data
 
 _EVALUATE_OUTPUT = List[Dict[str, float]]  # 1 dict per DataLoader
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'

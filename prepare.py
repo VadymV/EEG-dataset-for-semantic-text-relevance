@@ -4,10 +4,10 @@ Preprocesses and prepares EEG data for benchmarking.
 
 import logging
 
-from neurips.data_operations.preparator import DataPreparator
-from neurips.data_operations.preprocessor import DataPreprocessor, \
+from src.data_operations.preparator import DataPreparator
+from src.data_operations.preprocessor import DataPreprocessor, \
     load_evoked_response, plot_erp
-from neurips.misc.utils import set_logging, set_seed, create_args
+from src.misc.utils import set_logging, set_seed, create_args
 
 
 def run():

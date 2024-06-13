@@ -23,12 +23,12 @@ import numpy as np
 import pandas as pd
 from sklearn.model_selection import LeaveOneGroupOut
 
-from neurips.data_operations.loader_sentences import MAX_SENTENCE_LENGTH, \
+from src.data_operations.loader_sentences import MAX_SENTENCE_LENGTH, \
     DatasetSentences
-from neurips.data_operations.loader_words import DatasetWords
-from neurips.misc.utils import create_args, set_logging, set_seed
-from neurips.models import Models
-from neurips.trainer.trainer import train, test
+from src.data_operations.loader_words import DatasetWords
+from src.misc.utils import create_args, set_logging, set_seed
+from src.models import Models
+from src.trainer.trainer import train, test
 
 _BATCH_SIZE = 30
 
