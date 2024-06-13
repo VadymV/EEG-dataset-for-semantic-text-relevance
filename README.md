@@ -10,22 +10,28 @@ Electroencephalography (EEG) can enable non-invasive, real-time measurement of b
 ## Setup
 
 ### Configure the environment
-We use ``poetry`` as a tool for dependency management.
+``poetry`` is used for dependency management.
 See how to install ``poetry`` here: [poetry][3].
 
 After ``poetry`` is installed, run ``poetry install`` in the folder where the ``README.md`` file is located.
 
 
 ### Preprocessing and preparation
-To get the cleaned EEG data and data ready for benchmarks run this command.
-The ``project_path`` should point to the folder that contains ``raw`` data and ``annotations.csv`` file. 
-Please download them from here: [data repository][1]. We will also upload the ``benchmark_data`` containing already preprocessed and prepared data for benchmark results to enable faster reproductin of benchmark results.
+There are two ways to reproduce benchmark results (either of them can be used):
 
+- (1) Download ``raw`` data and ``annotations.csv`` from here: [data repository][1].
+Then run the following command that generates the data to be used in benchmark experiments.
+The ``project_path`` should point to the folder that contains the downloaded data.
 ```py
-poetry run python prepare.py --project_path=path 
+    poetry run python prepare.py --project_path=path
 ```
+- (2) Download the ``data_prepared_for_benchmark`` data that are already contains data prepared to be used in 
+benchmark experiments. This approach is beneficial to enable faster reproduction of benchmark results.
+
+
 ## Run word relevance classification task
 
+The ``project_path`` should point to the folder that contains the data need to reproduce the benchmark results.
 ```py
 poetry run python benchmark.py --project_path=path --benchmark=w
 ```

@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "neurips"
+name = "EEG-semantic-text-relevance"
 version = "0.1.0"
-description = ""
+description = "Code to reproduce benchmarks results of the paper submitted to NeurIPS"
 authors = ["Vadym Gryshchuk <vagr@di.ku.dk>"]
 readme = "README.md"
 

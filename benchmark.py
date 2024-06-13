@@ -72,10 +72,10 @@ def run(args: argparse.Namespace, seed: int):
 
     if is_sentence:
         dataset = DatasetSentences(
-            dir_data=os.path.join(args.project_path, "prepared"))
+            dir_data=os.path.join(args.project_path, "data_prepared_for_benchmark"))
     else:
         dataset = DatasetWords(
-            dir_data=os.path.join(args.project_path, "prepared"))
+            dir_data=os.path.join(args.project_path, "data_prepared_for_benchmark"))
 
     groups = dataset.participants
     logo = LeaveOneGroupOut()

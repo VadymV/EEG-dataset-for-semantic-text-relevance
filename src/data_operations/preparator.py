@@ -81,7 +81,7 @@ class DataPreparator:
         Prepares EEG data to be used for ML for benchmarking and saves it.
         """
 
-        prepared_dir = os.path.join(Path(self.data_dir).parent, 'prepared')
+        prepared_dir = os.path.join(Path(self.data_dir).parent, 'data_prepared_for_benchmark')
         utils.create_folder(prepared_dir)
 
         logging.info('Prepared dir is %s', prepared_dir)
