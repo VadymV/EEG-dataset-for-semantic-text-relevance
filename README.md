@@ -36,6 +36,12 @@ poetry run python benchmark.py --project_path=path --benchmark=w
 poetry run python benchmark.py --project_path=path --benchmark=s
 ```
 
+## Generate the predition scores
+
+```py
+poetry run python generate_results.py --project_path=path
+```
+
   [1]: https://doi.org/10.17605/OSF.IO/P4ZUE
   [2]: https://huggingface.co/datasets/VadymV/EEG-semantic-text-relevance
   [3]: https://python-poetry.org/docs/#installation

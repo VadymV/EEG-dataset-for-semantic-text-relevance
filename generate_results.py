@@ -89,5 +89,5 @@ def run(file_pattern: str):
 
 
 if __name__ == "__main__":
-    # run(file_pattern="w_relevance_seed*.pkl")
+    run(file_pattern="w_relevance_seed*.pkl")
     run(file_pattern="s_relevance_seed*.pkl")

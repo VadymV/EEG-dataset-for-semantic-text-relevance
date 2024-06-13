@@ -112,6 +112,8 @@ def train(model: torch.nn.Module,
 
 
 def classification_metrics(metric_list: List[str], num_classes: int):
+    # Copied from here https://github.com/torcheeg/torcheeg/blob/v1.1.2/torcheeg/trainers/classifier.py#L56-L281
+    # and modified
     allowed_metrics = [
         'precision', 'recall', 'f1score', 'accuracy', 'matthews', 'auroc',
         'kappa'
@@ -143,6 +145,8 @@ def classification_metrics(metric_list: List[str], num_classes: int):
 
 
 class ClassifierTrainer(pl.LightningModule):
+    # Copied from here https://github.com/torcheeg/torcheeg/blob/v1.1.2/torcheeg/trainers/classifier.py#L56-L281
+    # and modified
     r'''
         A generic trainer class for EEG classification.
 
