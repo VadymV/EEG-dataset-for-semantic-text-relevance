@@ -43,7 +43,8 @@ The ``project_path`` should point to the folder that contains the data needed to
 poetry run python benchmark.py --project_path=path --benchmark=s
 ```
 
-## Print prediction scores
+## Generate prediction scores
+Scores are saved to a ``logs_results.log`` file and outputted in a terminal window
 
 ```py
 poetry run python generate_results.py --project_path=path

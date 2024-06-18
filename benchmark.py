@@ -13,14 +13,24 @@
 # limitations under the License.
 
 """
-This script
+This script reproduces the benchmark results of our paper submitted to NeurIPS.
+To run this script use ``poetry run python benchmark.py --project_path=path
+--benchmark={w,s}`` where w stands for word relevance prediction and s stands
+for sentence relevance prediction. The project_path should point to the
+folder that contains the folder ``data_prepared_for_benchmark``.
+If this folder does not exist, run the script prepare.py first or
+download the data from here: https://doi.org/10.17605/OSF.IO/P4ZUE
+The script saves the results as pickle files.
 """
 import argparse
 import logging
 import os
+from typing import Union, Callable, List, Any, Literal, TypeVar
 
 import numpy as np
 import pandas as pd
+import torch
+from sklearn.base import BaseEstimator
 from sklearn.model_selection import LeaveOneGroupOut
 
 from src.data_operations.loader_sentences import MAX_SENTENCE_LENGTH, \
@@ -31,19 +41,41 @@ from src.models import Models
 from src.trainer.trainer import train, test
 
 _BATCH_SIZE = 30
+T = TypeVar("T")
 
 
-def test_model(tracker: dict,
-               test_idx: list,
-               model,
-               model_name: str,
-               dataset,
-               collator,
-               batch_size,
-               participant,
-               seed,
-               strategy,
-               reading_task: int):
+def fill_tracker(tracker: dict,
+                 test_idx: list,
+                 model: Union[torch.nn.Module, BaseEstimator],
+                 model_name: str,
+                 dataset: Union[DatasetSentences, DatasetWords],
+                 collator: Callable[[List[T]], Any],
+                 batch_size: int,
+                 participant: str,
+                 seed: int,
+                 strategy: Union[Literal["participant-dependent"], Literal[
+                     "participant-independent"]],
+                 reading_task: int):
+    """
+    Fills the tracker with the predictions, targets, and other info.
+    Args:
+        tracker: A dict for tracking info.
+        test_idx: Test indices of the participant.
+        model: A model.
+        model_name: Model name.
+        dataset: A dataset.
+        collator: A collator function.
+        batch_size: A batch size.
+        participant: A participant.
+        seed: Seed.
+        strategy: Evaluation strategy.
+        reading_task: A reading task as an integer.
+
+    Returns:
+        A dict containing the information about: model, predictions, targets,
+        user, seed, strategy, reading_task.
+    """
+
     test_predictions, test_labels = test(model,
                                          dataset=dataset,
                                          test_idx=test_idx,
@@ -72,10 +104,12 @@ def run(args: argparse.Namespace, seed: int):
 
     if is_sentence:
         dataset = DatasetSentences(
-            dir_data=os.path.join(args.project_path, "data_prepared_for_benchmark"))
+            dir_data=os.path.join(args.project_path,
+                                  "data_prepared_for_benchmark"))
     else:
         dataset = DatasetWords(
-            dir_data=os.path.join(args.project_path, "data_prepared_for_benchmark"))
+            dir_data=os.path.join(args.project_path,
+                                  "data_prepared_for_benchmark"))
 
     groups = dataset.participants
     logo = LeaveOneGroupOut()
@@ -94,6 +128,7 @@ def run(args: argparse.Namespace, seed: int):
         train_user_idx = []
         val_user_idx = []
         test_user_idx = []
+        # Iterate over reading tasks (8) and create train/val/test indices:
         for test_block in block_indices:
             val_user_block = test_block + 1 if test_block < len(
                 block_indices) else 1
@@ -113,6 +148,7 @@ def run(args: argparse.Namespace, seed: int):
 
         # Participant-independent strategy:
         logging.info("---- Participant-independent strategy ----")
+        # Iterate over models (5):
         for model_name in models.get_all_models():
             logging.info("---- %s ----", model_name)
             model = train(model=models.get_model(model_name),
@@ -123,29 +159,32 @@ def run(args: argparse.Namespace, seed: int):
                           collator=models.get_collator(model_name, is_sentence),
                           )
             models.set_model(model_name, model)
+            # Iterate over reading tasks (8):
             for reading_task, test_subset in enumerate(test_user_idx):
                 logging.info("---- Reading trial: %s ----", reading_task)
                 logging.info("---- Test subset length: %s ----",
                              len(test_subset))
-                tracker = test_model(tracker=tracker,
-                                     test_idx=test_subset,
-                                     model=model,
-                                     model_name=model_name,
-                                     collator=models.get_collator(model_name,
-                                                                  is_sentence),
-                                     batch_size=_BATCH_SIZE,
-                                     strategy="participant-independent",
-                                     dataset=dataset,
-                                     participant=participant,
-                                     seed=seed,
-                                     reading_task=reading_task,
-                                     )
+                tracker = fill_tracker(tracker=tracker,
+                                       test_idx=test_subset,
+                                       model=model,
+                                       model_name=model_name,
+                                       collator=models.get_collator(model_name,
+                                                                    is_sentence),
+                                       batch_size=_BATCH_SIZE,
+                                       strategy="participant-independent",
+                                       dataset=dataset,
+                                       participant=participant,
+                                       seed=seed,
+                                       reading_task=reading_task,
+                                       )
 
-        # Participant-dependent strategy:
+        # Participant-dependent strategy
+        # Iterate over reading tasks (8):
         for reading_task in range(len(test_user_idx)):
             logging.info("---- Reading trial: %s ----", reading_task)
             logging.info("---- Test subset length: %s ----",
                          len(test_user_idx[reading_task]))
+            # Iterate over models (5):
             for model_name in models.get_all_models():
                 logging.info("---- %s ----", model_name)
                 model = train(model=models.get_model(model_name),
@@ -156,21 +195,21 @@ def run(args: argparse.Namespace, seed: int):
                               collator=models.get_collator(model_name,
                                                            is_sentence),
                               )
-                tracker = test_model(tracker=tracker,
-                                     test_idx=test_user_idx[reading_task],
-                                     model=model,
-                                     model_name=model_name,
-                                     collator=models.get_collator(model_name,
-                                                                  is_sentence),
-                                     batch_size=_BATCH_SIZE,
-                                     strategy="participant-dependent",
-                                     dataset=dataset,
-                                     participant=participant,
-                                     seed=seed,
-                                     reading_task=reading_task,
-                                     )
+                tracker = fill_tracker(tracker=tracker,
+                                       test_idx=test_user_idx[reading_task],
+                                       model=model,
+                                       model_name=model_name,
+                                       collator=models.get_collator(model_name,
+                                                                    is_sentence),
+                                       batch_size=_BATCH_SIZE,
+                                       strategy="participant-dependent",
+                                       dataset=dataset,
+                                       participant=participant,
+                                       seed=seed,
+                                       reading_task=reading_task,
+                                       )
 
-        # Reset models
+        # Reset the models
         models.reset_models()
 
     logging.info("Saving the tracking data.")

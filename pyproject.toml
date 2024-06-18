@@ -23,6 +23,7 @@ datasets = "^2.19.2"
 mlcroissant = "^1.0.5"
 gitpython = "^3.1.43"
 osfclient = "^0.0.5"
+sphinx = "^7.3.7"
 
 
 [build-system]
