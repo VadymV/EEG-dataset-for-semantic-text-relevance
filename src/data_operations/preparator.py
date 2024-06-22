@@ -23,6 +23,10 @@ CHANNELS = ['Fp1', 'Fp2', 'F7', 'F3', 'Fz', 'F4', 'F8', 'FC5', 'FC1', 'FC2',
 class DataPreparator:
     """
     Prepares data for benchmarking.
+
+    Args:
+        data_dir: Folder with cleaned EEG data.
+        annotations: Ground truth annotations for words.
     """
 
     def __init__(self, data_dir: str):
@@ -30,8 +34,6 @@ class DataPreparator:
         Initializes an object.
         Args:
             data_dir: Folder with cleaned EEG data.
-            values_per_electrode: Number of values per electrode
-            when performing averaging.
         """
         self.data_dir = data_dir
         self.annotations = pd.read_csv(os.path.join(Path(data_dir).parent,
@@ -40,7 +42,7 @@ class DataPreparator:
 
     def save_cleaned_data(self):
         """
-        Saves cleaned data as numpy array .
+        Saves cleaned data as numpy array.
         Saves the metadata for the cleaned data as a csv file.
         """
 
@@ -78,7 +80,7 @@ class DataPreparator:
 
     def prepare_data_for_benchmark(self):
         """
-        Prepares EEG data to be used for ML for benchmarking and saves it.
+        Prepares data for benchmarking.
         """
 
         prepared_dir = os.path.join(Path(self.data_dir).parent, 'data_prepared_for_benchmark')
@@ -115,15 +117,15 @@ class DataPreparator:
     def _extract_documents(self, metadata: pd.DataFrame, eeg_data: np.ndarray,
                            idx: str) -> Tuple[dict, dict]:
         """
-        Extracts relevant and irrelevant documents.
+        Extracts documents for a given participant.
         Args:
             metadata: Metadata dataframe.
             eeg_data: EEG data.
             idx: ID of a participant.
 
         Returns:
-            A tuple of relevant and irrelevant text documents and
-            the corresponding EEG data.
+            A tuple of text documents and the corresponding EEG data for a
+            given participant.
         """
 
         relevant_topics = metadata['selected_topic'].unique()

@@ -42,6 +42,7 @@ def run(file_pattern: str, args: argparse.Namespace):
     results = []
     for fp in filepaths:
         with open(fp, 'r') as f:
+            logging.info('Reading %s', fp)
             results.append(pd.read_pickle(f.name))
     results = pd.concat(results)
 

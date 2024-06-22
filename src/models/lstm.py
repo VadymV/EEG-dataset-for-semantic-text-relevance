@@ -1,8 +1,7 @@
-from typing import Union
+# Copied from https://github.com/torcheeg/torcheeg/blob/v1.1.2/torcheeg/models/rnn/lstm.py and modified.
 
 import torch
 import torch.nn as nn
-import torch.nn.functional as F
 
 
 class LSTM(nn.Module):
@@ -39,6 +38,7 @@ class LSTM(nn.Module):
         hid_channels (int): The number of hidden nodes in the GRU layers and the fully connected layer. (default: :obj:`64`)
         num_classes (int): The number of classes to predict. (default: :obj:`2`)
     '''
+
     def __init__(self,
                  input_dim: int = 32,
                  hid_channels: int = 64,

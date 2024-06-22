@@ -1,5 +1,9 @@
+"""
+Trainer.
+"""
+
 import logging
-from typing import Any, Dict, List, Tuple, Union
+from typing import Any, Dict, List, Tuple, Union, Callable, TypeVar
 
 import pytorch_lightning as pl
 import torch
@@ -16,6 +20,7 @@ from src.data_operations.loader_words import \
 from src.data_operations.misc import get_data
 
 _EVALUATE_OUTPUT = List[Dict[str, float]]  # 1 dict per DataLoader
+T = TypeVar("T")
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 NUM_WORKERS = 8 if torch.cuda.is_available() else 0
 PIN_MEMORY = True if torch.cuda.is_available() else False
@@ -27,17 +32,20 @@ log = logging.getLogger('torcheeg')
 def test(model: torch.nn.Module,
          dataset: Union[DatasetSentences, DatasetWords],
          test_idx: list,
-         collator,
+         collator: Callable[[List[T]], Any],
          batch_size: int) -> ():
     """
-    Trains a model and makes predictions.
+    Tests a model.
+
     Args:
         model: Model.
         dataset: Dataset.
         test_idx: Test indices.
+        collator: A collator function.
+        batch_size: A batch size.
 
     Returns:
-        A dict for tracking info and a model.
+        Predictions and targets.
     """
     # Create data loader:
     test_loader = DataLoader(Subset(dataset, test_idx),
@@ -64,19 +72,21 @@ def train(model: torch.nn.Module,
           dataset: Union[DatasetSentences, DatasetWords],
           train_idx: list,
           val_idx: list,
-          collator,
+          collator: Callable[[List[T]], Any],
           batch_size: int) -> torch.nn.Module:
     """
-    Trains a model and makes predictions.
+    Trains a model.
+
     Args:
-        collator:
+        collator: A collator function.
         model: Model.
         dataset: Dataset.
         train_idx: Train indices.
         val_idx: Validation indices.
+        batch_size: A batch size.
 
     Returns:
-        A dict for tracking info and a model.
+        A model.
     """
 
     # Create data loaders:
@@ -103,7 +113,7 @@ def train(model: torch.nn.Module,
         callbacks = [early_stopping_callback]
         trainer = ClassifierTrainer(model, accelerator=DEVICE)
         trainer.fit(train_loader, val_loader, callbacks=callbacks)
-        model=trainer.model
+        model = trainer.model
     else:
         train_eeg, train_labels = get_data(train_loader)
         model.fit(train_eeg, train_labels)
@@ -112,8 +122,7 @@ def train(model: torch.nn.Module,
 
 
 def classification_metrics(metric_list: List[str], num_classes: int):
-    # Copied from here https://github.com/torcheeg/torcheeg/blob/v1.1.2/torcheeg/trainers/classifier.py#L56-L281
-    # and modified
+    # Copied from https://github.com/torcheeg/torcheeg/blob/v1.1.2/torcheeg/trainers/classifier.py
     allowed_metrics = [
         'precision', 'recall', 'f1score', 'accuracy', 'matthews', 'auroc',
         'kappa'
@@ -145,7 +154,7 @@ def classification_metrics(metric_list: List[str], num_classes: int):
 
 
 class ClassifierTrainer(pl.LightningModule):
-    # Copied from here https://github.com/torcheeg/torcheeg/blob/v1.1.2/torcheeg/trainers/classifier.py#L56-L281
+    # Copied from here https://github.com/torcheeg/torcheeg/blob/v1.1.2/torcheeg/trainers/classifier.py
     # and modified
     r'''
         A generic trainer class for EEG classification.

@@ -585,6 +585,8 @@ def load_evoked_response(dir_cleaned: str,
     Args:
         dir_cleaned: Path to cleaned EEG.
         filter_flag: Condition for selection epochs.
+        average: Average epochs or not.
+        annotations: Annotations.
 
     Returns:
         Epoch data.
@@ -613,6 +615,9 @@ def load_evoked_response(dir_cleaned: str,
 
 
 def plot_erp(work_dir, epos, queries, file_id, ch_names=['Pz'], l=None, title=None, **kwargs):
+    """
+    Plots ERPs.
+    """
     l = l or queries
     evos = {l[0]: [], l[1]: []}
 
@@ -650,21 +655,14 @@ def plot_erp(work_dir, epos, queries, file_id, ch_names=['Pz'], l=None, title=No
                 bbox_inches="tight")
     plt.close()
 
-
+# The following two functions are for preparing
+# the data for statistical analysis. They are not used for benchmark.
 def _fill_average_evoked_responses(epochs: EpochsFIF,
                                    relevance: int,
                                    data: dict,
                                    subject: str):
     """
-
-    Args:
-        epochs:
-        relevance:
-        data:
-        subject:
-
-    Returns:
-
+    Calculates averaged evoked responses.
     """
     filter_exp = f'annotation == {relevance}'
     epochs = epochs[filter_exp].pick_channels(CHANNELS)
@@ -697,6 +695,9 @@ def _fill_average_evoked_responses(epochs: EpochsFIF,
 
 def create_average_evoked_response(dir_cleaned: str,
                                    annotations: pd.DataFrame) -> mne.Evoked:
+    """
+    Calculates averaged evoked responses.
+    """
     epos = []
     data = {'subject': [], 'channel': [], 't1': [], 't2': [], 't3': [],
             'relevance': []}

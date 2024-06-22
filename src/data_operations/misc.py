@@ -1,4 +1,7 @@
-import logging
+"""
+Miscellaneous functions.
+"""
+
 import os
 from typing import Tuple
 
@@ -9,11 +12,12 @@ from torch import Tensor
 from torch.utils.data import DataLoader
 
 
-
-def get_data(loader: DataLoader, only_labels: bool = False) -> Tuple[Tensor, Tensor]:
+def get_data(loader: DataLoader,
+             only_labels: bool = False) -> Tuple[Tensor, Tensor]:
     """
     Extracts data from the data loader.
     Args:
+        only_labels: Whether to only return labels.
         loader: A data loader.
 
     Returns:

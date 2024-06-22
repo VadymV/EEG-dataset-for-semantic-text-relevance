@@ -1,7 +1,11 @@
+"""
+Definition of all models.
+"""
+
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
 from sklearn.linear_model import LogisticRegression
 
-from src.data_operations.loader_sentences import MAX_SENTENCE_LENGTH, \
+from src.data_operations.loader_sentences import \
     CollatorLSTMSentence, CollatorEEGNetSentence, CollatorTransformerSentence, \
     CollatorSentence
 from src.data_operations.loader_words import CollatorLSTMWord, \
@@ -12,6 +16,16 @@ from src.models.uercm import UERCM
 
 
 class Models:
+    """
+    A class for holding all models.
+
+    Attributes:
+        lstm: An LSTM model.
+        eegnet: An EEGNet model.
+        lda: A linear discriminant analysis model.
+        lr: A logistic regression model.
+        uercm: An UERCM model.
+    """
 
     def __init__(self, class_weight: dict, lstm_input_dim: int,
                  transformer_sequence_length: int,

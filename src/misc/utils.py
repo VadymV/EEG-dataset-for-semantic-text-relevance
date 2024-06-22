@@ -1,4 +1,9 @@
+"""
+Miscellaneous utilities.
+"""
+
 import argparse
+import logging
 import os
 import random
 from enum import Enum
@@ -11,8 +16,12 @@ from torch.backends import cudnn
 def create_folder(output_dir, with_checking=False):
     """
     Creates a folder.
-    :param output_dir: Path to the location
-    :return: full path to the folder
+    Args:
+        output_dir: Output folder.
+        with_checking: Whether to check if the folder exists.
+
+    Returns:
+        Output folder.
     """
     if with_checking and os.path.exists(output_dir):
         raise ValueError("The folder exists")
@@ -24,10 +33,12 @@ def create_folder(output_dir, with_checking=False):
 
 def set_logging(log_dir: str, file_name: str):
     """
-    Creates a logging file.
-    :param log_dir: a logging directory
+    Sets logging.
+    Args:
+        log_dir: Logging directory.
+        file_name: File name where the logs will be stored.
+
     """
-    import logging
     logging.basicConfig(
         level=logging.DEBUG,
         format="%(asctime)s [%(levelname)s] %(message)s",
@@ -40,8 +51,10 @@ def set_logging(log_dir: str, file_name: str):
 
 def set_seed(seed):
     """
-    Sets seed for reproducible results.
-    :param seed: int value.
+    Sets the seed.
+    Args:
+        seed: Seed.
+
     """
     random.seed(seed)
     np.random.seed(seed)
@@ -51,10 +64,14 @@ def set_seed(seed):
 
 def create_args(seeds_args: bool = True, benchmark_args: bool = True) -> argparse.ArgumentParser:
     """
-    Creates the argument parser.
+    Creates an argument parser.
+    Args:
+        seeds_args: Whether to add the ``seeds`` argument.
+        benchmark_args: Whether to add the ``benchmark`` argument.
 
     Returns:
         An argument parser.
+
     """
     parser = argparse.ArgumentParser(description='Arguments')
     parser.add_argument('--project_path',
@@ -76,6 +93,8 @@ def create_args(seeds_args: bool = True, benchmark_args: bool = True) -> argpars
 
 
 class Relevance(Enum):
+    """
+    Relevance and irrelevance labels.
+    """
     RELEVANT = 1
-
     IRRELEVANT = 0

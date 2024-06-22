@@ -124,7 +124,7 @@ def run(args: argparse.Namespace, seed: int):
                                         groups=groups[train_idx]).__next__()
 
         # Get indices for reading trials (2 * 8):
-        block_indices = dataset.get_topic_blocks(test_idx)
+        block_indices = dataset.get_indices_for_reading_tasks(test_idx)
         train_user_idx = []
         val_user_idx = []
         test_user_idx = []
